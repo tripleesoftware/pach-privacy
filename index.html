@@ -13,8 +13,12 @@
       line-height: 1.7;
     }
     
-    /* Dil Gizleme Mantığı */
+    /* Dil Gizleme Mantığı (Varsayılan olarak hepsi gizli) */
     .lang-en, .lang-tr { display: none; }
+    
+    /* Aktif dil görünürlüğü */
+    body.lang-tr-active .lang-tr { display: block; }
+    body.lang-en-active .lang-en { display: block; }
     
     /* Dil Değiştirici Buton Barı */
     .lang-switch-container {
@@ -86,12 +90,12 @@
     }
   </style>
 </head>
-<body>
+<body class="lang-tr-active">
 
 <header>
   <!-- Dil Seçici Butonlar -->
   <div class="lang-switch-container">
-    <button id="btn-tr" class="lang-btn" onclick="switchLang('tr')">TR</button>
+    <button id="btn-tr" class="lang-btn active" onclick="switchLang('tr')">TR</button>
     <button id="btn-en" class="lang-btn" onclick="switchLang('en')">EN</button>
   </div>
 
@@ -110,8 +114,8 @@
 
 <main>
 
-  <!-- ================= TÜRKÇE İÇERİK ================= -->
-<div class="lang-en">
+  <!-- ================= TÜRKÇE İÇERİK (Düzeltildi: lang-tr oldu) ================= -->
+  <div class="lang-tr">
     <div class="card">
       <p>Pach olarak gizliliğinize değer veriyoruz. Bu politika; uygulamamızı kullandığınızda hangi kişisel verileri topladığımızı, bu verileri nasıl kullandığımızı ve haklarınızın neler olduğunu açıklar. Uygulamamızı kullanarak bu politikalarla ilgili şartları kabul etmiş olursunuz.</p>
       <p>Triple-E Software ("biz", "bizim" veya "tarafımız"), Pach mobil uygulamasını ("Hizmet") işletmektedir. Bu sayfa, Hizmetimizi kullandığınızda kişisel verilerin toplanması, kullanılması ve ifşa edilmesine ilişkin politikalarımız hakkında sizi bilgilendirir.</p>
@@ -125,7 +129,7 @@
     <h2>2. Yerel Veri Depolama</h2>
     <div class="card">
       <p>Pach içerisinde oluşturulan veya kullanılan tüm veriler, ayarlar ve içerikler kesinlikle yalnızca cihazınızda yerel olarak saklanır.</p>
-    <ul>
+      <ul>
         <li>Cihazınızda depolanan verilere hiçbir erişimimiz yoktur.</li>
         <li>Uygulamayı kaldırır veya cihaz ayarlarınız üzerinden uygulama verilerini temizlerseniz, yerel olarak depolanan tüm bilgiler kalıcı olarak silinir ve tarafımızca kurtarılamaz.</li>
       </ul>
@@ -227,49 +231,3 @@
       <p>© 2026 Pach. All rights reserved.</p>
     </footer>
   </div>
-
-</main>
-
-<script>
-  function switchLang(lang) {
-    // 1. Tüm dillerdeki içerikleri gizle
-    document.querySelectorAll('.lang-tr, .lang-en').forEach(el => {
-      el.style.display = 'none';
-    });
-
-    // 2. Seçilen dildeki içerikleri göster
-    document.querySelectorAll('.lang-' + lang).forEach(el => {
-      el.style.display = 'block';
-    });
-
-    // 3. Buton aktiflik durumlarını güncelle
-    document.getElementById('btn-tr').classList.remove('active');
-    document.getElementById('btn-en').classList.remove('active');
-    document.getElementById('btn-' + lang).classList.add('active');
-
-    // 4. HTML lang attribute güncelle
-    document.documentElement.lang = lang;
-  }
-
-  // Başlangıç Mantığı: URL'den ?lang=en parametresini oku veya tarayıcı diline bak
-  const urlParams = new URLSearchParams(window.location.search);
-  const langParam = urlParams.get('lang');
-
-  if (langParam && (langParam === 'en' || langParam === 'tr')) {
-    switchLang(langParam);
-  } else {
-    // Otomatik Dil Algılama (Varsayılan olarak 'tr' fallback yap)
-    const browserLang = navigator.language || navigator.userLanguage;
-    if (browserLang.startsWith('en')) {
-      switchLang('en');
-    } else {
-      switchLang('tr');
-    }
-  }
-</script>
-
-</body>
-</html>
-
-
-
