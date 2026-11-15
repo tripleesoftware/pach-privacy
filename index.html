@@ -13,12 +13,12 @@
       line-height: 1.7;
     }
     
-    /* Dil Gizleme Mantığı (Varsayılan olarak hepsi gizli) */
-    .lang-en, .lang-tr { display: none; }
+    /* Varsayılan olarak tüm dil blokları gizli */
+    .lang-section { display: none; }
     
-    /* Aktif dil görünürlüğü */
-    body.lang-tr-active .lang-tr { display: block; }
-    body.lang-en-active .lang-en { display: block; }
+    /* Aktif olan dil bloğu gösterilir */
+    body[data-active-lang="tr"] .lang-tr { display: block; }
+    body[data-active-lang="en"] .lang-en { display: block; }
     
     /* Dil Değiştirici Buton Barı */
     .lang-switch-container {
@@ -90,7 +90,7 @@
     }
   </style>
 </head>
-<body class="lang-tr-active">
+<body data-active-lang="tr">
 
 <header>
   <!-- Dil Seçici Butonlar -->
@@ -100,13 +100,13 @@
   </div>
 
   <!-- Header Türkçe -->
-  <div class="lang-tr">
+  <div class="lang-section lang-tr">
     <h1>Pach Gizlilik Politikası</h1>
     <p>Son güncelleme: Kasım 2026</p>
   </div>
 
   <!-- Header İngilizce -->
-  <div class="lang-en">
+  <div class="lang-section lang-en">
     <h1>Pach Privacy Policy</h1>
     <p>Last updated: Nov 2026</p>
   </div>
@@ -114,8 +114,8 @@
 
 <main>
 
-  <!-- ================= TÜRKÇE İÇERİK (Düzeltildi: lang-tr oldu) ================= -->
-  <div class="lang-tr">
+  <!-- ================= TÜRKÇE İÇERİK ================= -->
+  <div class="lang-section lang-tr">
     <div class="card">
       <p>Pach olarak gizliliğinize değer veriyoruz. Bu politika; uygulamamızı kullandığınızda hangi kişisel verileri topladığımızı, bu verileri nasıl kullandığımızı ve haklarınızın neler olduğunu açıklar. Uygulamamızı kullanarak bu politikalarla ilgili şartları kabul etmiş olursunuz.</p>
       <p>Triple-E Software ("biz", "bizim" veya "tarafımız"), Pach mobil uygulamasını ("Hizmet") işletmektedir. Bu sayfa, Hizmetimizi kullandığınızda kişisel verilerin toplanması, kullanılması ve ifşa edilmesine ilişkin politikalarımız hakkında sizi bilgilendirir.</p>
@@ -174,7 +174,7 @@
   </div>
 
   <!-- ================= İNGİLİZCE İÇERİK ================= -->
-  <div class="lang-en">
+  <div class="lang-section lang-en">
     <div class="card">
       <p>At Pach, we value your privacy. This policy explains what personal data we collect when you use our application, how we use this data, and what your rights are. By using our application, you agree to this policy.</p>
       <p>Triple-E Software ("we", "our", or "us") operates the Pach mobile application (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service.</p>
@@ -231,3 +231,38 @@
       <p>© 2026 Pach. All rights reserved.</p>
     </footer>
   </div>
+
+</main>
+
+<script>
+  function switchLang(lang) {
+    // 1. Body üzerindeki aktif dil özniteliğini değiştir (CSS bunu baz alarak tetiklenir)
+    document.body.setAttribute('data-active-lang', lang);
+
+    // 2. Butonların aktiflik durumunu güncelle
+    document.getElementById('btn-tr').classList.remove('active');
+    document.getElementById('btn-en').classList.remove('active');
+    document.getElementById('btn-' + lang).classList.add('active');
+
+    // 3. HTML lang özniteliğini güncelle
+    document.documentElement.lang = lang;
+  }
+
+  // Sayfa yüklendiğinde URL parametresi veya tarayıcı diline göre dil seçimi
+  const urlParams = new URLSearchParams(window.location.search);
+  const langParam = urlParams.get('lang');
+
+  if (langParam && (langParam === 'en' || langParam === 'tr')) {
+    switchLang(langParam);
+  } else {
+    const browserLang = navigator.language || navigator.userLanguage;
+    if (browserLang.startsWith('en')) {
+      switchLang('en');
+    } else {
+      switchLang('tr');
+    }
+  }
+</script>
+
+</body>
+</html>
